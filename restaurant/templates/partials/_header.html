@@ -2,6 +2,7 @@
 <header>
   <img src="{% static 'img/logo.png' %}" />
 </header>
+
 <nav>
   <ul>
     <li><a href="{% url 'home' %}">Home</a></li>
@@ -9,5 +10,10 @@
     <li><a href="{% url 'menu' %}">Menu</a></li>
     <li><a href="{% url 'book' %}">Book</a></li>
     <li><a href="{% url 'reservations' %}">Reservations</a></li>
+  
+    <li class="right">      
+        <a onclick="logout()" hidden="true" id="user">{{request.user}}</a>
+        <a href="{% url 'login_browser' %}" id="login">Login</a>
+    </li>
   </ul>
 </nav>

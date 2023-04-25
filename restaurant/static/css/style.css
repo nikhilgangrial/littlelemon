@@ -6,6 +6,27 @@ body {
     margin-right: 5%;
 }
 
+.res-table {
+    width: 80%;
+    text-align: center;
+    font-family: 'Markazi Text', serif;
+    font-size: 1.25em;
+    border: 1px solid
+}
+
+tr:nth-child(even) {
+    background: rgba(87, 120, 108, 0.5);
+}
+
+th {
+    background: #57786c;
+    color: white;
+}
+
+nav > ul > li.right {
+    position: absolute;
+    right: 0.75rem;
+}
 
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Markazi Text', serif;
@@ -25,7 +46,8 @@ h2 {
 }
 
 p, ul{
-    font-size: 1.25rem;;
+    font-size: 1.25rem;
+    position: relative;
 }
 
 a {
@@ -123,7 +145,7 @@ input, select{
     box-sizing: border-box;
 }
 
-#button {
+#button, input[type="submit"], input[type="button"] {
     padding: .5rem 1rem;
     border: 1px solid #495E57;
     background-color:#495E57;;

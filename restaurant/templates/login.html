@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="row">
+        <div class="column">
+            <h1>Signup</h1>
+            <form method="post" action="/auth/users/" name="signup">
+                {% comment %} {% csrf_token %} {% endcomment %}
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="username">
+                <br>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="email">
+                <br>
+                <label for="password">Password</label>
+                <input type="password" placeholder="password" id="password" name="password">
+                <br>
+                <label for="repassword">Confirm Password</label>
+                <input type="password" placeholder="repassword" id="repassword" name="repassword">
+                <br>
+                <input type="submit" onclick="formSubmit(event)" value="Signup">
+            </form>
+        </div>
+
+        <div class="column">
+            <h1>Login</h1>
+            <form method="post" action="/auth/token/login" name="login">
+                {% comment %} {% csrf_token %} {% endcomment %}
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="username">
+                <br>
+                <label for="password">Password</label>
+                <input type="password" placeholder="password" id="password" name="password">
+                <br>
+                <input type="submit" onclick="formSubmit(event)" value="Login">
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extrascripts %}
+    <script>
+        function formSubmit(event) {
+            event.preventDefault();
+            console.log(event.target.parentElement);
+            const form = event.target.parentElement;
+
+            if (form.name === "signup") {
+                if (form[2].value !== form[3].value) {
+                    alert("Passwords do not match");
+                    return;
+                }
+            }
+
+            const body = {};
+            for (let i = 0; i < form.length - 1; i++) {
+                body[form[i].name] = form[i].value;
+            }
+            console.log(JSON.stringify(body));
+            fetch(form.action, {
+                method: "post",
+                body: JSON.stringify(body),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(r => {
+                    if (r.status === 201) {
+                        formSubmit({
+                            preventDefault: () => {
+                            },
+                            target: {
+                                parentElement: {
+                                    0: {name: "username", value: body.username},
+                                    1: {name: "password", value: body.password},
+                                    2: {},
+                                    name: "login",
+                                    length: 3,
+                                    action: "/auth/token/login",
+                                }
+                            }
+                        })
+                    } else if (r.status === 200) {
+                        r.json().then(res => {
+                            window.localStorage.setItem('token', res.auth_token);
+                            window.localStorage.setItem('user', body.username);
+                            window.location = '/';
+                        })
+                    } else {
+                        JSON.stringify(r).then(res => {
+                            console.log(res);
+                            alert(res);
+                        });
+                    }
+                })
+        }
+    </script>
+{% endblock %}
